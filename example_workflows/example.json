@@ -1,0 +1,341 @@
+{
+  "id": "94f4fdce-153b-44c4-bc1c-d074a035cb5d",
+  "revision": 0,
+  "last_node_id": 26,
+  "last_link_id": 56,
+  "nodes": [
+    {
+      "id": 15,
+      "type": "PreviewAny",
+      "pos": [
+        -720,
+        760
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 49
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.41",
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 19,
+      "type": "LoadImage",
+      "pos": [
+        -2080,
+        640
+      ],
+      "size": [
+        270,
+        314
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            17
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.41",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ]
+    },
+    {
+      "id": 18,
+      "type": "GetImageSize",
+      "pos": [
+        -1680,
+        640
+      ],
+      "size": [
+        210,
+        136
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 17
+        }
+      ],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            45
+          ]
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            46
+          ]
+        },
+        {
+          "name": "batch_size",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.41",
+        "Node name for S&R": "GetImageSize"
+      },
+      "widgets_values": [
+        "width: 768, height: 768\n batch size: 1"
+      ]
+    },
+    {
+      "id": 21,
+      "type": "CR Prompt Text",
+      "pos": [
+        -1720,
+        1000
+      ],
+      "size": [
+        360,
+        108
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            56
+          ]
+        },
+        {
+          "name": "show_help",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "RockOfFire/ComfyUI_Comfyroll_CustomNodes",
+        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
+        "Node name for S&R": "CR Prompt Text"
+      },
+      "widgets_values": [
+        "input4"
+      ]
+    },
+    {
+      "id": 20,
+      "type": "CR Prompt Text",
+      "pos": [
+        -1720,
+        840
+      ],
+      "size": [
+        360,
+        108
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            55
+          ]
+        },
+        {
+          "name": "show_help",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "RockOfFire/ComfyUI_Comfyroll_CustomNodes",
+        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
+        "Node name for S&R": "CR Prompt Text"
+      },
+      "widgets_values": [
+        "input3"
+      ]
+    },
+    {
+      "id": 25,
+      "type": "JavascriptExecutor",
+      "pos": [
+        -1200,
+        720
+      ],
+      "size": [
+        400,
+        320
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "input1",
+          "shape": 7,
+          "type": "*",
+          "link": 45
+        },
+        {
+          "name": "input2",
+          "shape": 7,
+          "type": "*",
+          "link": 46
+        },
+        {
+          "name": "input3",
+          "shape": 7,
+          "type": "*",
+          "link": 55
+        },
+        {
+          "name": "input4",
+          "shape": 7,
+          "type": "*",
+          "link": 56
+        },
+        {
+          "name": "input5",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "input6",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": [
+            49
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "artifyfun/ComfyUI-JS",
+        "ver": "97b2165653ab1a9a35d4b3125ee8704aa36907ec",
+        "Node name for S&R": "JavascriptExecutor"
+      },
+      "widgets_values": [
+        "On",
+        "\n  // input1 ~ input6 any\n  // return any\n  try {\n    if (input1 > input2) {\n      return input3.toUpperCase();\n    } else {\n      return input4.toUpperCase();\n    }\n  } catch (e) {\n    return input5\n  }\n"
+      ]
+    }
+  ],
+  "links": [
+    [
+      17,
+      19,
+      0,
+      18,
+      0,
+      "IMAGE"
+    ],
+    [
+      45,
+      18,
+      0,
+      25,
+      0,
+      "*"
+    ],
+    [
+      46,
+      18,
+      1,
+      25,
+      1,
+      "*"
+    ],
+    [
+      49,
+      25,
+      0,
+      15,
+      0,
+      "*"
+    ],
+    [
+      55,
+      20,
+      0,
+      25,
+      2,
+      "*"
+    ],
+    [
+      56,
+      21,
+      0,
+      25,
+      3,
+      "*"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6727499949325629,
+      "offset": [
+        2191.760794547964,
+        -355.71419273983
+      ]
+    },
+    "frontendVersion": "1.21.7",
+    "VHS_latentpreview": true,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

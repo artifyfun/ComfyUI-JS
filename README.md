@@ -6,4 +6,4 @@
 
 ## 工作流举例
 
-![workflow.png](workflows%2Fworkflow.png)
+![workflow.png](example_workflows%2Fexample.png)
