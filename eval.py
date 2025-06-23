@@ -1,13 +1,13 @@
 import execjs
 
-text2text_code = r"""
-  function replaceUnderline(str) {
-    return str.replace(/_/g, ' ');
+default_code = r"""
+  function convertToUpperCase(str = '') {
+    return str.toUpperCase();
   }
-  return replaceUnderline(text + ', ' + 'test for ComfyUI_JS!')
+  return convertToUpperCase(input_string)
 """
 
-class Text2Text:
+class JavascriptExecutor:
     def __init__(self):
         pass
 
@@ -16,52 +16,30 @@ class Text2Text:
         return {
             "required": {
                 "enable": (["On", "Off"], {"default":"On"}),
-                "text": ("STRING", {"forceInput": True}),
-                "javascript_code": ("STRING", {"default": text2text_code, "multiline": True, "dynamicPrompts": False}),
+                "input_string": ("STRING", {"forceInput": False}),
+                "javascript_code": ("STRING", {"default": default_code, "multiline": True, "dynamicPrompts": False}),
             },
         }
 
     
     RETURN_TYPES = ('STRING',)
-    RETURN_NAMES = ('text',)
+    RETURN_NAMES = ('output_string',)
     FUNCTION = "eval"
     CATEGORY = "ComfyUI JS"
 
-    def eval(self, enable, text, javascript_code):
+    def eval(self, enable, input_string, javascript_code):
         if enable == "Off":
-            return {"ui": {"text": text}, "result": (text,)}
-        full_code = f"function get_result(text){{{javascript_code}}}"
+            return {"ui": {"input_string": input_string}, "result": (input_string,)}
+        full_code = f"function get_result(input_string){{{javascript_code}}}"
         ctx = execjs.compile(full_code)
-        res = ctx.call("get_result", text)
-        return {"ui": {"text": res}, "result": (res,)}
-
-
-class TextInput:
-    def __init__(self):
-      pass
-    
-    @classmethod
-    def INPUT_TYPES(s):
-        return {"required": {
-                    "text": ("STRING", {"default": "text strings", "multiline": True}),
-                    },
-                }
-
-    RETURN_TYPES = ("STRING", )
-    RETURN_NAMES = ("text", )
-    FUNCTION = "get_value"
-    CATEGORY = "ComfyUI JS"
-
-    def get_value(self, text):
-        return (text,)
+        res = ctx.call("get_result", input_string)
+        return {"ui": {"input_string": input_string}, "result": (res,)}
 
 
 NODE_CLASS_MAPPINGS = {
-    "Text2Text": Text2Text,
-    "TextInput": TextInput,
+    "JavascriptExecutor": JavascriptExecutor,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "Text2Text": "Text to Text",
-    "TextInput": "Text Input",
+    "JavascriptExecutor": "Javascript Executor",
 }
