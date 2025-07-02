@@ -6,4 +6,8 @@
 
 ## 工作流举例
 
+单路输出：
 ![workflow.png](example_workflows%2Fexample.png)
+
+多路输出：
+![workflow.png](example_workflows%2Fmulti_output.png)

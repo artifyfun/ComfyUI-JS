@@ -17,7 +17,7 @@ default_code = r"""
 multi_code = r"""
   // input1 ~ input6 any
   // return any[]
-  return [input1 * 1, input2 + '_subfix', Number(input3), input4, input5, input6]
+  return [input1 * 2, input2 + '_subfix', Number(input3), input4, input5, input6]
 """
 
 class AlwaysEqualProxy(str):
