@@ -97,8 +97,10 @@ class JavascriptExecutorMultiOutput:
         full_code = f"function get_result(input1, input2, input3, input4, input5, input6){{{javascript_code}}}"
         ctx = execjs.compile(full_code)
         res = ctx.call("get_result", input1, input2, input3, input4, input5, input6)
-        if type(res) == list:
-            return (res[0], res[1], res[2], res[3], res[4], res[5])
+        if isinstance(res, list):
+            # 数组可能不足 6 个元素，补齐 None 避免 IndexError
+            padded = (res + [None] * 6)[:6]
+            return tuple(padded)
         return (res, res, res, res, res, res)
 
 NODE_CLASS_MAPPINGS = {
