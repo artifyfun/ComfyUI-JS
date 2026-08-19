@@ -4,6 +4,26 @@
 
 可以运行JavaScript代码的ComfyUI自定义节点，输入JavaScript代码，输出运行结果
 
+## 使用注意
+
+- `javascript_code` 输入框只接受**纯 JavaScript** 代码，不能直接粘贴 markdown 文本
+  （如 `# 标题`、`**加粗**`、`- 列表`、``` ``` ``` 代码块围栏等）。
+  若误粘贴，节点会报错并提示疑似 markdown 的行号。
+- 输入框中的代码会被包进 `function get_result(input1 ~ input6) { ... }`，
+  因此请直接写函数体语句（可用 `return` 返回结果），不要再写 `function` 声明；
+  参数 `input1 ~ input6` 直接可用。
+- 输入参数 `input1 ~ input6` 为任意类型。若接入 IMAGE/tensor 等无法直接
+  序列化的对象，节点会自动降级为 `tolist()`/`str()` 后传入。
+- 返回值会经 JSON 往返，`undefined`/`NaN` 等会变成 `None`；`BigInt` 不支持。
+
+## 性能
+
+- 节点内部使用**常驻 Node 进程**（JSON 行协议 + 代码编译缓存），
+  多次执行 / 循环调用时无需反复启动子进程，速度较传统 execjs 方式提升
+  数十倍；代码变更会自动重新编译，进程意外退出会自动重启。
+- `console.log` 等调试输出会转发到服务端日志，不影响节点返回值。
+- 若运行环境没有 `node`，会自动回退到 PyExecJS 执行。
+
 ## 工作流举例
 
 单路输出：
