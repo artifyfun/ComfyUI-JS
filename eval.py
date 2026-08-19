@@ -282,7 +282,11 @@ def _extract_js_error(e):
 
 
 def _check_markdown(code):
-    """检测代码中疑似混入的 markdown 语法（行首标记），返回提示列表。"""
+    """检测代码中疑似混入的 markdown 语法（行首标记），返回提示列表。
+
+    注意：模板字符串(反引号)内放 markdown 是合法用法，正常执行时不会走到
+    这里的提示；只有执行失败(如反引号嵌套破坏语法)时才会用于辅助诊断。
+    """
     hints = []
     for i, line in enumerate(code.splitlines(), 1):
         s = line.strip()
@@ -301,6 +305,34 @@ def _check_markdown(code):
         elif re.match(r"^\|.*\|$", s):
             hints.append(f"第{i}行疑似 markdown 表格 '| ... |'")
     return hints[:3]
+
+
+def _markdown_advice(code):
+    """针对「模板字符串内嵌 markdown」给出可执行的修复建议。
+
+    模板字符串里放 markdown 是合法且常用的写法，但 markdown 中的反引号
+    (行内 `code` / 代码块 ``` ``` ```) 会提前截断模板字符串导致语法错误，
+    需要转义或改用 input 传入。这里根据代码内容给出针对性建议。
+    """
+    advices = []
+    # 统计未转义反引号（跳过 \\` 转义）。执行已失败，若代码里出现反引号，
+    # 大概率是 markdown 的反引号破坏了模板字符串，提示转义方向。
+    count = 0
+    i = 0
+    while i < len(code):
+        if code[i] == "\\":
+            i += 2
+            continue
+        if code[i] == "`":
+            count += 1
+        i += 1
+    if count:
+        advices.append("markdown 中的反引号(行内 `code` / 代码块 ```)需转义为 \\` 或 \\`\\`\\`，否则会截断模板字符串")
+    elif "${" in code:
+        advices.append("markdown 中的 ${...} 会被当作 JS 插值求值，需写成 \\${ 保留原样")
+    if advices:
+        advices.append("更简单：把 markdown 文本作为 input 传入，代码里只做拼接")
+    return advices
 
 
 def _run_js(javascript_code, *args):
@@ -322,7 +354,10 @@ def _run_js(javascript_code, *args):
         md = _check_markdown(javascript_code)
         msg = f"JS 执行失败: {err}"
         if md:
-            msg += "\n提示: " + "；".join(md) + "。本节点只接受纯 JavaScript，不能直接粘贴 markdown 文本。"
+            msg += "\n提示: " + "；".join(md) + "。本节点只接受纯 JavaScript。"
+        advice = _markdown_advice(javascript_code)
+        if advice:
+            msg += "\n修复建议: " + "；".join(advice) + "。"
         raise RuntimeError(msg) from e
 
 
